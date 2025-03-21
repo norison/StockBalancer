@@ -1,6 +1,6 @@
 import {it, expect} from "vitest";
 import {render, screen} from '@testing-library/react';
-import App from './App';
+import App from './App.tsx';
 
 it('renders App component', () => {
   render(<App/>);

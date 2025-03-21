@@ -1,0 +1,20 @@
+{
+  "appId": "com.norison.stock-balancer",
+  "files": [
+    "dist-electron",
+    "dist-react"
+  ],
+  "mac": {
+    "target": "dmg"
+  },
+  "linux": {
+    "target": "AppImage",
+    "category": "Finance"
+  },
+  "win": {
+    "target": [
+      "portable",
+      "msi"
+    ]
+  }
+}

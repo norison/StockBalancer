@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { Balancer } from '../../src/ui/services/balancer/Balancer';
 import { Portfolio } from '../../src/ui/services/balancer/models/Portfolio';
 

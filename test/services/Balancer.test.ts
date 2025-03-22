@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { Balancer } from './Balancer';
-import { Portfolio } from './models/Portfolio';
+import { Balancer } from '../../src/ui/services/balancer/Balancer';
+import { Portfolio } from '../../src/ui/services/balancer/models/Portfolio';
 
 describe('Balancer', () => {
   const balancer = new Balancer();

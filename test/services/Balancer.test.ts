@@ -1,5 +1,5 @@
 import { Balancer } from '../../src/ui/services/balancer/Balancer';
-import { Portfolio } from '../../src/ui/services/balancer/models/Portfolio';
+import { Portfolio } from '../../src/ui/types/Portfolio.ts';
 
 describe('Balancer', () => {
   const balancer = new Balancer();
@@ -8,8 +8,8 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 0,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 0 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 0 }
+        { ticker: 'AAPL', quantity: 10, price: 150, target: 0 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, target: 0 }
       ]
     };
 
@@ -21,8 +21,8 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 1000,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 50 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 50 }
+        { ticker: 'AAPL', quantity: 10, price: 150, target: 50 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, target: 50 }
       ]
     };
 
@@ -36,9 +36,9 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 140,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 50 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 30 },
-        { ticker: 'AMZN', quantity: 0, price: 50, percentage: 20 }
+        { ticker: 'AAPL', quantity: 10, price: 150, target: 50 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, target: 30 },
+        { ticker: 'AMZN', quantity: 0, price: 50, target: 20 }
       ]
     };
 
@@ -53,8 +53,8 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 50,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 50 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 50 }
+        { ticker: 'AAPL', quantity: 10, price: 150, target: 50 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, target: 50 }
       ]
     };
 

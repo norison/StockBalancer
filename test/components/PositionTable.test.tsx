@@ -1,12 +1,12 @@
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import PositionTable from '../../src/ui/components/PositionTable';
-import {Position} from '../../src/ui/services/balancer/models/Position';
+import {Position} from '../../src/ui/types/Position.ts';
 
 describe('PositionTable', () => {
   const positions: Position[] = [
-    {ticker: 'AAPL', quantity: 100, price: 150, percentage: 25},
-    {ticker: 'GOOGL', quantity: 50, price: 2500, percentage: 25},
+    {ticker: 'AAPL', quantity: 100, price: 150, target: 25},
+    {ticker: 'GOOGL', quantity: 50, price: 2500, target: 25},
   ];
 
   const editRequested = vi.fn();

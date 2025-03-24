@@ -43,6 +43,11 @@ const App: FC = () => {
     setAddPositionDialogOpen(false);
   };
 
+  const handleCancel = () => {
+    setEditPosition(undefined);
+    setAddPositionDialogOpen(false);
+  };
+
   return (
     <Container sx={{ my: 2 }}>
       <Stack>
@@ -91,7 +96,7 @@ const App: FC = () => {
       <PositionFormDialog
         open={addPositionDialogOpen}
         position={editPosition}
-        onCancel={() => setAddPositionDialogOpen(false)}
+        onCancel={handleCancel}
         onSubmit={handleSubmitPosition}
       />
     </Container>

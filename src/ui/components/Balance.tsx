@@ -88,7 +88,9 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
         </>
       ) : (
         <>
-          <Typography variant="h6">Current Balance: ${balance}</Typography>
+          <Typography variant="h6">
+            Current Balance: ${balance.toFixed(2)}
+          </Typography>
           <IconButton data-testid="BalanceEditButton" onClick={handleEditClick}>
             <EditOutlinedIcon />
           </IconButton>

@@ -10,7 +10,7 @@ describe("Balance", () => {
   it("renders balance correctly", () => {
     render(<Balance balance={balance} balanceChanged={balanceChanged} />);
     expect(
-      screen.getByText(`Current Balance: $${balance}`),
+      screen.getByText(`Current Balance: $${balance.toFixed(2)}`),
     ).toBeInTheDocument();
   });
 
@@ -28,7 +28,7 @@ describe("Balance", () => {
 
     const input = screen.getByRole("textbox");
     await userEvent.clear(input);
-    await userEvent.type(input, "10.4");
+    await userEvent.type(input, "10.40");
     const saveButton = screen.getByTestId("BalanceSaveButton");
     await userEvent.click(saveButton);
 

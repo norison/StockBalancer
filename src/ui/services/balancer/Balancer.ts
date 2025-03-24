@@ -1,6 +1,6 @@
 import {IBalancer} from "./IBalancer.ts";
-import {Portfolio} from "./models/Portfolio.ts";
-import {Position} from "./models/Position.ts";
+import {Portfolio} from "../../types/Portfolio.ts";
+import {Position} from "../../types/Position.ts";
 
 export class Balancer implements IBalancer {
   calculate(portfolio: Portfolio): Portfolio {
@@ -10,7 +10,7 @@ export class Balancer implements IBalancer {
 
     const targetValues: Record<string, number> = {};
     portfolio.positions.forEach(p => {
-      targetValues[p.ticker] = totalAvailable * (p.percentage / 100);
+      targetValues[p.ticker] = totalAvailable * (p.target / 100);
     });
 
     const currentValues: Record<string, number> = {};
@@ -22,7 +22,7 @@ export class Balancer implements IBalancer {
       ticker: p.ticker,
       quantity: p.quantity,
       price: p.price,
-      percentage: p.percentage
+      target: p.target
     }));
 
     let purchased: boolean;

@@ -1,4 +1,4 @@
-import {Portfolio} from "./models/Portfolio.ts";
+import {Portfolio} from "../../types/Portfolio.ts";
 
 export interface IBalancer {
   calculate(portfolio: Portfolio): Portfolio;

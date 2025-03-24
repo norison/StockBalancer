@@ -13,7 +13,8 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { Position } from "../types/Position.ts";
+import { observer } from "mobx-react-lite";
+import { usePortfolio } from "../stores/PortfolioStore.ts";
 
 const schema = yup.object({
   ticker: yup.string().required(),
@@ -24,19 +25,9 @@ const schema = yup.object({
 
 type FormData = yup.InferType<typeof schema>;
 
-type PositionFormDialogProps = {
-  open: boolean;
-  position?: Position;
-  onCancel: () => void;
-  onSubmit: (data: Position) => void;
-};
+const PositionFormDialog: FC = observer(() => {
+  const portfolioStore = usePortfolio();
 
-const PositionFormDialog: FC<PositionFormDialogProps> = ({
-  open,
-  position,
-  onCancel,
-  onSubmit,
-}) => {
   const {
     handleSubmit,
     control,
@@ -48,24 +39,36 @@ const PositionFormDialog: FC<PositionFormDialogProps> = ({
   });
 
   useEffect(() => {
-    if (open) {
-      if (position) {
-        setValue("ticker", position.ticker);
-        setValue("quantity", position.quantity);
-        setValue("price", position.price);
-        setValue("target", position.target);
+    if (portfolioStore.dialogOpen) {
+      if (portfolioStore.currentPosition) {
+        setValue("ticker", portfolioStore.currentPosition.ticker);
+        setValue("quantity", portfolioStore.currentPosition.quantity);
+        setValue("price", portfolioStore.currentPosition.price);
+        setValue("target", portfolioStore.currentPosition.target);
       } else {
         reset();
       }
     }
-  }, [open, reset, setValue, position]);
+  }, [
+    reset,
+    setValue,
+    portfolioStore.currentPosition,
+    portfolioStore.dialogOpen,
+  ]);
 
   const onSubmitInternal = (data: FormData) => {
-    onSubmit(data);
+    if (portfolioStore.currentPosition) {
+      portfolioStore.editPosition(data);
+    } else {
+      portfolioStore.addPosition(data);
+    }
   };
 
   return (
-    <Dialog open={open} onClose={onCancel}>
+    <Dialog
+      open={portfolioStore.dialogOpen}
+      onClose={() => portfolioStore.cancelDialog()}
+    >
       <DialogTitle>Add Position</DialogTitle>
       <DialogContent>
         <Divider />
@@ -136,7 +139,9 @@ const PositionFormDialog: FC<PositionFormDialogProps> = ({
           </Stack>
 
           <DialogActions>
-            <Button onClick={onCancel}>Cancel</Button>
+            <Button onClick={() => portfolioStore.cancelDialog()}>
+              Cancel
+            </Button>
             <Button variant="contained" type="submit">
               Save
             </Button>
@@ -145,6 +150,6 @@ const PositionFormDialog: FC<PositionFormDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});
 
 export default PositionFormDialog;

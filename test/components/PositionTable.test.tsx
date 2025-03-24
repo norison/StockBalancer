@@ -1,45 +1,61 @@
-import {render, screen} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import PositionTable from '../../src/ui/components/PositionTable';
-import {Position} from '../../src/ui/types/Position.ts';
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import PositionTable from "../../src/ui/components/PositionTable";
+import { vi } from "vitest";
+import { renderWithProviders } from "../utils.tsx";
 
-describe('PositionTable', () => {
-  const positions: Position[] = [
-    {ticker: 'AAPL', quantity: 100, price: 150, target: 25},
-    {ticker: 'GOOGL', quantity: 50, price: 2500, target: 25},
-  ];
+const openEditDialogMock = vi.fn();
+const removePositionMock = vi.fn();
 
-  const editRequested = vi.fn();
-  const deleteRequested = vi.fn();
+const positionsMock = vi.fn(() => [
+  { ticker: "AAPL", quantity: 10, price: 150, target: 50 },
+  { ticker: "GOOGL", quantity: 5, price: 2500, target: 50 },
+]);
 
-  it('renders positions correctly', () => {
-    render(<PositionTable positions={positions} editRequested={editRequested} deleteRequested={deleteRequested} />);
+vi.mock("../../src/ui/stores/PortfolioStore.ts", async () => {
+  const actual = await vi.importActual("../../src/ui/stores/PortfolioStore.ts");
 
-    expect(screen.getByText('AAPL')).toBeInTheDocument();
-    expect(screen.getByText('GOOGL')).toBeInTheDocument();
+  return {
+    ...actual,
+    usePortfolio: () => ({
+      get positions() {
+        return positionsMock();
+      },
+      openEditDialog: openEditDialogMock,
+      removePosition: removePositionMock,
+    }),
+  };
+});
+
+describe("PositionTable", () => {
+  it("renders positions correctly", () => {
+    renderWithProviders(<PositionTable />);
+    expect(screen.getByText("AAPL")).toBeInTheDocument();
+    expect(screen.getByText("GOOGL")).toBeInTheDocument();
   });
 
-  it('calls editRequested when edit button is clicked', async () => {
-    render(<PositionTable positions={positions} editRequested={editRequested} deleteRequested={deleteRequested} />);
-
-    const buttons = screen.getAllByTestId<HTMLButtonElement>("PositionTableEditButton");
+  it("when clicking edit button calls correct store methods", async () => {
+    renderWithProviders(<PositionTable />);
+    const buttons = screen.getAllByTestId<HTMLButtonElement>(
+      "PositionTableEditButton",
+    );
 
     await userEvent.click(buttons[0]);
-    expect(editRequested).toHaveBeenCalledWith(positions[0].ticker);
+    expect(openEditDialogMock).toHaveBeenCalled();
   });
 
-  it('calls deleteRequested when delete button is clicked', async () => {
-    render(<PositionTable positions={positions} editRequested={editRequested} deleteRequested={deleteRequested} />);
-
-    const buttons = screen.getAllByTestId<HTMLButtonElement>("PositionTableDeleteButton");
-
+  it("when clicking delete button calls correct store methods", async () => {
+    renderWithProviders(<PositionTable />);
+    const buttons = screen.getAllByTestId<HTMLButtonElement>(
+      "PositionTableDeleteButton",
+    );
     await userEvent.click(buttons[0]);
-    expect(deleteRequested).toHaveBeenCalledWith(positions[0].ticker);
+    expect(removePositionMock).toHaveBeenCalled();
   });
 
   it('displays "No positions" message when positions array is empty', () => {
-    render(<PositionTable positions={[]} editRequested={editRequested} deleteRequested={deleteRequested} />);
-
-    expect(screen.getByText('No positions')).toBeInTheDocument();
+    positionsMock.mockReturnValue([]);
+    renderWithProviders(<PositionTable />);
+    expect(screen.getByText("No positions")).toBeInTheDocument();
   });
 });

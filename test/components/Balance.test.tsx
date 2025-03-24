@@ -1,43 +1,63 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Balance from "../../src/ui/components/Balance";
+import { renderWithProviders } from "../utils.tsx";
 import { expect } from "vitest";
 
-describe("Balance", () => {
-  const balance = 10.2;
-  const balanceChanged = vi.fn();
+let balance = 10.4;
 
+vi.mock("../../src/ui/stores/PortfolioStore.ts", async () => {
+  const actual = await vi.importActual("../../src/ui/stores/PortfolioStore.ts");
+
+  return {
+    ...actual,
+    usePortfolio: () => ({
+      get balance() {
+        return balance;
+      },
+      set balance(value: number) {
+        balance = value;
+      },
+    }),
+  };
+});
+
+describe("Balance", () => {
   it("renders balance correctly", () => {
-    render(<Balance balance={balance} balanceChanged={balanceChanged} />);
+    renderWithProviders(<Balance />);
     expect(
       screen.getByText(`Current Balance: $${balance.toFixed(2)}`),
     ).toBeInTheDocument();
   });
 
   it("enters edit mode when edit button is clicked", async () => {
-    render(<Balance balance={balance} balanceChanged={balanceChanged} />);
+    renderWithProviders(<Balance />);
     const editButton = screen.getByTestId("BalanceEditButton");
     await userEvent.click(editButton);
     expect(screen.getByRole("textbox")).toBeInTheDocument();
   });
 
   it("saves new balance when save button is clicked", async () => {
-    render(<Balance balance={balance} balanceChanged={balanceChanged} />);
+    renderWithProviders(<Balance />);
+
+    const newBalance = 50.45;
+
     const editButton = screen.getByTestId("BalanceEditButton");
     await userEvent.click(editButton);
 
     const input = screen.getByRole("textbox");
     await userEvent.clear(input);
-    await userEvent.type(input, "10.40");
+    await userEvent.type(input, newBalance.toString());
     const saveButton = screen.getByTestId("BalanceSaveButton");
     await userEvent.click(saveButton);
 
-    expect(balanceChanged).toHaveBeenCalledWith(10.4);
-    expect(saveButton).toBeEnabled();
+    expect(
+      screen.getByText(`Current Balance: $${newBalance.toFixed(2)}`),
+    ).toBeInTheDocument();
   });
 
-  it("balanceChanged was not called because of validation error", async () => {
-    render(<Balance balance={balance} balanceChanged={balanceChanged} />);
+  it("save button is disabled because of validation error", async () => {
+    renderWithProviders(<Balance />);
     const editButton = screen.getByTestId("BalanceEditButton");
     await userEvent.click(editButton);
 
@@ -46,6 +66,5 @@ describe("Balance", () => {
     await userEvent.type(input, "-100");
 
     expect(screen.getByTestId("BalanceSaveButton")).toBeDisabled();
-    expect(balanceChanged).not.toHaveBeenCalled();
   });
 });

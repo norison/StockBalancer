@@ -32,6 +32,7 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
     defaultValues: {
       newBalance: balance,
     },
+    mode: "onChange",
   });
 
   useEffect(() => {
@@ -68,7 +69,6 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
             <Controller
               name="newBalance"
               control={control}
-              rules={{ required: true }}
               render={({ field }) => (
                 <TextField
                   {...field}

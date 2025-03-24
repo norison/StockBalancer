@@ -5,25 +5,42 @@ import PositionTable from "./components/PositionTable.tsx";
 import AddIcon from "@mui/icons-material/Add";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import Balance from "./components/Balance.tsx";
+import PositionFormDialog from "./components/PositionFormDialog.tsx";
 
 const App: FC = () => {
+  const [addPositionDialogOpen, setAddPositionDialogOpen] = useState(false);
   const [balance, setBalance] = useState(1000);
-  const [positions, setPositions] = useState<Position[]>([
-    { ticker: "AAPL", quantity: 100, price: 150, target: 25 },
-    { ticker: "GOOGL", quantity: 50, price: 2500, target: 25 },
-    { ticker: "AMZN", quantity: 10, price: 3500, target: 25 },
-    { ticker: "TSLA", quantity: 5, price: 600, target: 25 },
-  ]);
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [editPosition, setEditPosition] = useState<Position>();
 
   const possibleToCalculate =
     positions.reduce((prev, position) => prev + position.target, 0) === 100;
 
   const handleEditRequested = (ticker: string) => {
-    console.log(`Edit requested for ${ticker}`);
+    setEditPosition(positions.find((p) => p.ticker === ticker) ?? undefined);
+    setAddPositionDialogOpen(true);
   };
 
   const handleDeleteRequested = (ticker: string) => {
     setPositions(positions.filter((position) => position.ticker !== ticker));
+  };
+
+  const handleSubmitPosition = (position: Position) => {
+    const existingPosition = positions.find(
+      (p) => p.ticker === position.ticker,
+    );
+
+    if (existingPosition) {
+      setPositions(
+        positions.map((p) => (p.ticker === position.ticker ? position : p)),
+      );
+      setEditPosition(undefined);
+    } else {
+      setPositions([...positions, position]);
+      setEditPosition(undefined);
+    }
+
+    setAddPositionDialogOpen(false);
   };
 
   return (
@@ -38,7 +55,11 @@ const App: FC = () => {
           }}
         >
           <Balance balance={balance} balanceChanged={setBalance} />
-          <Button variant="contained" startIcon={<AddIcon />}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setAddPositionDialogOpen(true)}
+          >
             Add Position
           </Button>
         </Box>
@@ -53,6 +74,7 @@ const App: FC = () => {
           title="You need to have 100% target allocation to calculate"
           arrow
           disableHoverListener={possibleToCalculate}
+          disableFocusListener={possibleToCalculate}
         >
           <Box component="span" sx={{ alignSelf: "flex-start", mt: 2 }}>
             <Button
@@ -65,6 +87,13 @@ const App: FC = () => {
           </Box>
         </Tooltip>
       </Stack>
+
+      <PositionFormDialog
+        open={addPositionDialogOpen}
+        position={editPosition}
+        onCancel={() => setAddPositionDialogOpen(false)}
+        onSubmit={handleSubmitPosition}
+      />
     </Container>
   );
 };

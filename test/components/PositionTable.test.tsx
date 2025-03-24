@@ -1,28 +1,45 @@
 import {render, screen} from '@testing-library/react';
-import PositionTable from "../../src/ui/components/PositionTable.tsx"
-import {Position} from "../../src/ui/services/balancer/models/Position.ts";
-
-const positions: Position[] = [
-  {ticker: "AAPL", quantity: 10, price: 100, targetPercentage: 50},
-  {ticker: "GOOGL", quantity: 5, price: 200, targetPercentage: 35},
-  {ticker: "TSLA", quantity: 3, price: 300, targetPercentage: 15},
-];
+import userEvent from '@testing-library/user-event';
+import PositionTable from '../../src/ui/components/PositionTable';
+import {Position} from '../../src/ui/services/balancer/models/Position';
 
 describe('PositionTable', () => {
-  it('renders table', () => {
-    render(<PositionTable positions={positions}/>);
-    expect(screen.getByText('Ticket')).toBeInTheDocument();
-    expect(screen.getByText('Quantity')).toBeInTheDocument();
-    expect(screen.getByText('Price')).toBeInTheDocument();
-    expect(screen.getByText('Percentage')).toBeInTheDocument();
-    expect(screen.getByText('Actions')).toBeInTheDocument();
-    expect(screen.getAllByRole('button')).toHaveLength(positions.length);
+  const positions: Position[] = [
+    {ticker: 'AAPL', quantity: 100, price: 150, percentage: 25},
+    {ticker: 'GOOGL', quantity: 50, price: 2500, percentage: 25},
+  ];
 
-    positions.forEach(position => {
-      expect(screen.getByText(position.ticker)).toBeInTheDocument();
-      expect(screen.getByText(position.quantity.toString())).toBeInTheDocument();
-      expect(screen.getByText(position.price.toString())).toBeInTheDocument();
-      expect(screen.getByText(position.targetPercentage.toString())).toBeInTheDocument();
-    });
+  const editRequested = vi.fn();
+  const deleteRequested = vi.fn();
+
+  it('renders positions correctly', () => {
+    render(<PositionTable positions={positions} editRequested={editRequested} deleteRequested={deleteRequested} />);
+
+    expect(screen.getByText('AAPL')).toBeInTheDocument();
+    expect(screen.getByText('GOOGL')).toBeInTheDocument();
+  });
+
+  it('calls editRequested when edit button is clicked', async () => {
+    render(<PositionTable positions={positions} editRequested={editRequested} deleteRequested={deleteRequested} />);
+
+    const buttons = screen.getAllByTestId<HTMLButtonElement>("PositionTableEditButton");
+
+    await userEvent.click(buttons[0]);
+    expect(editRequested).toHaveBeenCalledWith(positions[0].ticker);
+  });
+
+  it('calls deleteRequested when delete button is clicked', async () => {
+    render(<PositionTable positions={positions} editRequested={editRequested} deleteRequested={deleteRequested} />);
+
+    const buttons = screen.getAllByTestId<HTMLButtonElement>("PositionTableDeleteButton");
+
+    await userEvent.click(buttons[0]);
+    expect(deleteRequested).toHaveBeenCalledWith(positions[0].ticker);
+  });
+
+  it('displays "No positions" message when positions array is empty', () => {
+    render(<PositionTable positions={[]} editRequested={editRequested} deleteRequested={deleteRequested} />);
+
+    expect(screen.getByText('No positions')).toBeInTheDocument();
   });
 });

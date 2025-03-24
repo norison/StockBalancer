@@ -10,7 +10,7 @@ export class Balancer implements IBalancer {
 
     const targetValues: Record<string, number> = {};
     portfolio.positions.forEach(p => {
-      targetValues[p.ticker] = totalAvailable * (p.targetPercentage / 100);
+      targetValues[p.ticker] = totalAvailable * (p.percentage / 100);
     });
 
     const currentValues: Record<string, number> = {};
@@ -22,7 +22,7 @@ export class Balancer implements IBalancer {
       ticker: p.ticker,
       quantity: p.quantity,
       price: p.price,
-      targetPercentage: p.targetPercentage
+      percentage: p.percentage
     }));
 
     let purchased: boolean;

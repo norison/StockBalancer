@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { Position } from "../types/Position.ts";
 import {
   IconButton,
   Paper,
@@ -13,26 +12,14 @@ import {
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { usePortfolio } from "../stores/PortfolioStore.ts";
+import { observer } from "mobx-react-lite";
 
-type PositionTableProps = {
-  positions: Position[];
-  editRequested: (ticker: string) => void;
-  deleteRequested: (ticker: string) => void;
-};
-
-const PositionTable: FC<PositionTableProps> = ({
-  positions,
-  editRequested,
-  deleteRequested,
-}) => {
-  const totalValue = positions.reduce(
-    (previousValue, position) =>
-      previousValue + position.quantity * position.price,
-    0,
-  );
+const PositionTable: FC = observer(() => {
+  const portfolioStore = usePortfolio();
 
   const calculateCurrentPercentage = (quantity: number, price: number) => {
-    return ((quantity * price) / totalValue) * 100;
+    return ((quantity * price) / portfolioStore.totalValue) * 100;
   };
 
   return (
@@ -61,14 +48,14 @@ const PositionTable: FC<PositionTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {positions.length === 0 ? (
+          {portfolioStore.positions.length === 0 ? (
             <TableRow>
               <TableCell colSpan={6} sx={{ padding: 2, textAlign: "center" }}>
                 <Typography>No positions</Typography>
               </TableCell>
             </TableRow>
           ) : (
-            positions.map((position) => (
+            portfolioStore.positions.map((position) => (
               <TableRow
                 key={position.ticker}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -100,14 +87,18 @@ const PositionTable: FC<PositionTableProps> = ({
                   <IconButton
                     data-testid="PositionTableEditButton"
                     size="small"
-                    onClick={() => editRequested(position.ticker)}
+                    onClick={() =>
+                      portfolioStore.openEditDialog(position.ticker)
+                    }
                   >
                     <EditOutlinedIcon />
                   </IconButton>
                   <IconButton
                     data-testid="PositionTableDeleteButton"
                     size="small"
-                    onClick={() => deleteRequested(position.ticker)}
+                    onClick={() =>
+                      portfolioStore.removePosition(position.ticker)
+                    }
                   >
                     <DeleteOutlineOutlinedIcon />
                   </IconButton>
@@ -119,6 +110,6 @@ const PositionTable: FC<PositionTableProps> = ({
       </Table>
     </TableContainer>
   );
-};
+});
 
 export default PositionTable;

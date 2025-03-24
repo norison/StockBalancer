@@ -1,24 +1,33 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
+import { renderWithProviders } from "../utils.tsx";
 import PositionFormDialog from "../../src/ui/components/PositionFormDialog.tsx";
-import { Position } from "../../src/ui/types/Position.ts";
+
+const currentPositionMock = vi.fn();
+const cancelDialogMock = vi.fn();
+const addPositionMock = vi.fn();
+const editPositionMock = vi.fn();
+
+vi.mock("../../src/ui/stores/PortfolioStore.ts", async () => {
+  const actual = await vi.importActual("../../src/ui/stores/PortfolioStore.ts");
+
+  return {
+    ...actual,
+    usePortfolio: () => ({
+      dialogOpen: true,
+      get currentPosition() {
+        return currentPositionMock();
+      },
+      cancelDialog: cancelDialogMock,
+      addPosition: addPositionMock,
+      editPosition: editPositionMock,
+    }),
+  };
+});
 
 describe("PositionFormDialog", () => {
-  const mockOnCancel = vi.fn();
-  const mockOnSubmit = vi.fn();
-
-  const defaultProps = {
-    open: true,
-    onCancel: mockOnCancel,
-    onSubmit: mockOnSubmit,
-  };
-
-  const renderComponent = (props = {}) =>
-    render(<PositionFormDialog {...defaultProps} {...props} />);
-
   it("renders the dialog with default values", () => {
-    renderComponent();
+    renderWithProviders(<PositionFormDialog />);
     expect(screen.getByLabelText(/Ticker/i)).toHaveValue("");
     expect(screen.getByLabelText(/Quantity/i)).toHaveValue("");
     expect(screen.getByLabelText(/Price/i)).toHaveValue("");
@@ -26,14 +35,13 @@ describe("PositionFormDialog", () => {
   });
 
   it("renders the dialog with provided position values", () => {
-    const position: Position = {
+    currentPositionMock.mockReturnValue({
       ticker: "AAPL",
       quantity: 10,
       price: 150,
       target: 50,
-    };
-    renderComponent({ position });
-
+    });
+    renderWithProviders(<PositionFormDialog />);
     expect(screen.getByLabelText(/Ticker/i)).toHaveValue("AAPL");
     expect(screen.getByLabelText(/Quantity/i)).toHaveValue("10");
     expect(screen.getByLabelText(/Price/i)).toHaveValue("150");
@@ -41,13 +49,20 @@ describe("PositionFormDialog", () => {
   });
 
   it("calls onCancel when the cancel button is clicked", async () => {
-    renderComponent();
+    renderWithProviders(<PositionFormDialog />);
     await userEvent.click(screen.getByText(/Cancel/i));
-    expect(mockOnCancel).toHaveBeenCalledTimes(1);
+    expect(cancelDialogMock).toHaveBeenCalledTimes(1);
   });
 
-  it("calls onSubmit with form data when the save button is clicked", async () => {
-    renderComponent();
+  it("calls onCancel when press escape button", async () => {
+    renderWithProviders(<PositionFormDialog />);
+    await userEvent.keyboard("{Escape}");
+    expect(cancelDialogMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("when not current position then calls add position", async () => {
+    currentPositionMock.mockReturnValue(null);
+    renderWithProviders(<PositionFormDialog />);
     await userEvent.type(screen.getByLabelText(/Ticker/i), "GOOGL");
     await userEvent.clear(screen.getByLabelText(/Quantity/i));
     await userEvent.type(screen.getByLabelText(/Quantity/i), "20");
@@ -58,16 +73,31 @@ describe("PositionFormDialog", () => {
 
     await userEvent.click(screen.getByText(/Save/i));
 
-    expect(mockOnSubmit).toHaveBeenCalledWith({
-      ticker: "GOOGL",
-      quantity: 20,
-      price: 2000,
-      target: 30,
-    });
+    screen.debug();
+
+    expect(addPositionMock).toHaveBeenCalled();
+  });
+
+  it("when with current position then calls edit position", async () => {
+    currentPositionMock.mockReturnValue({});
+    renderWithProviders(<PositionFormDialog />);
+    await userEvent.type(screen.getByLabelText(/Ticker/i), "GOOGL");
+    await userEvent.clear(screen.getByLabelText(/Quantity/i));
+    await userEvent.type(screen.getByLabelText(/Quantity/i), "20");
+    await userEvent.clear(screen.getByLabelText(/Price/i));
+    await userEvent.type(screen.getByLabelText(/Price/i), "2000");
+    await userEvent.clear(screen.getByLabelText(/Target %/i));
+    await userEvent.type(screen.getByLabelText(/Target %/i), "30");
+
+    await userEvent.click(screen.getByText(/Save/i));
+
+    screen.debug();
+
+    expect(editPositionMock).toHaveBeenCalled();
   });
 
   it("shows validation errors for invalid input", async () => {
-    renderComponent();
+    renderWithProviders(<PositionFormDialog />);
     await userEvent.clear(screen.getByLabelText(/Ticker/i));
     await userEvent.clear(screen.getByLabelText(/Quantity/i));
     await userEvent.type(screen.getByLabelText(/Quantity/i), "-1");

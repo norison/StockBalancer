@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "inversify-react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { PortfolioProvider, store } from "./stores/PortfolioStore.ts";
 import container from "./container/container.ts";
 import { theme } from "./theme.ts";
 import App from "./App.tsx";
@@ -15,8 +16,10 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider container={container}>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
+        <PortfolioProvider value={store}>
+          <CssBaseline />
+          <App />
+        </PortfolioProvider>
       </ThemeProvider>
     </Provider>
   </StrictMode>,

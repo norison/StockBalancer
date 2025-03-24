@@ -5,11 +5,8 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-type BalanceCardProps = {
-  balance: number;
-  balanceChanged: (newBalance: number) => void;
-};
+import { observer } from "mobx-react-lite";
+import { usePortfolio } from "../stores/PortfolioStore.ts";
 
 const schema = yup.object({
   newBalance: yup.number().required().min(0),
@@ -17,7 +14,8 @@ const schema = yup.object({
 
 type FormData = yup.InferType<typeof schema>;
 
-const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
+const Balance: FC = observer(() => {
+  const portfolioStore = usePortfolio();
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,7 +26,7 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      newBalance: balance,
+      newBalance: portfolioStore.balance,
     },
     mode: "onChange",
   });
@@ -40,7 +38,7 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
   }, [isEditing]);
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    balanceChanged(data.newBalance);
+    portfolioStore.balance = data.newBalance;
     setIsEditing(false);
   };
 
@@ -89,7 +87,7 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
       ) : (
         <>
           <Typography variant="h6">
-            Current Balance: ${balance.toFixed(2)}
+            Current Balance: ${portfolioStore.balance.toFixed(2)}
           </Typography>
           <IconButton data-testid="BalanceEditButton" onClick={handleEditClick}>
             <EditOutlinedIcon />
@@ -98,6 +96,6 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
       )}
     </Box>
   );
-};
+});
 
 export default Balance;

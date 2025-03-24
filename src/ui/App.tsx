@@ -1,52 +1,15 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Box, Button, Container, Stack, Tooltip } from "@mui/material";
-import { Position } from "./types/Position.ts";
 import PositionTable from "./components/PositionTable.tsx";
 import AddIcon from "@mui/icons-material/Add";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import Balance from "./components/Balance.tsx";
 import PositionFormDialog from "./components/PositionFormDialog.tsx";
+import { usePortfolio } from "./stores/PortfolioStore.ts";
+import { observer } from "mobx-react-lite";
 
-const App: FC = () => {
-  const [addPositionDialogOpen, setAddPositionDialogOpen] = useState(false);
-  const [balance, setBalance] = useState<number>(0);
-  const [positions, setPositions] = useState<Position[]>([]);
-  const [editPosition, setEditPosition] = useState<Position>();
-
-  const possibleToCalculate =
-    positions.reduce((prev, position) => prev + position.target, 0) === 100;
-
-  const handleEditRequested = (ticker: string) => {
-    setEditPosition(positions.find((p) => p.ticker === ticker) ?? undefined);
-    setAddPositionDialogOpen(true);
-  };
-
-  const handleDeleteRequested = (ticker: string) => {
-    setPositions(positions.filter((position) => position.ticker !== ticker));
-  };
-
-  const handleSubmitPosition = (position: Position) => {
-    const existingPosition = positions.find(
-      (p) => p.ticker === position.ticker,
-    );
-
-    if (existingPosition) {
-      setPositions(
-        positions.map((p) => (p.ticker === position.ticker ? position : p)),
-      );
-      setEditPosition(undefined);
-    } else {
-      setPositions([...positions, position]);
-      setEditPosition(undefined);
-    }
-
-    setAddPositionDialogOpen(false);
-  };
-
-  const handleCancel = () => {
-    setEditPosition(undefined);
-    setAddPositionDialogOpen(false);
-  };
+const App: FC = observer(() => {
+  const portfolioStore = usePortfolio();
 
   return (
     <Container sx={{ my: 2 }}>
@@ -59,33 +22,29 @@ const App: FC = () => {
             mb: 2,
           }}
         >
-          <Balance balance={balance} balanceChanged={setBalance} />
+          <Balance />
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => setAddPositionDialogOpen(true)}
+            onClick={() => portfolioStore.openAddDialog()}
           >
             Add Position
           </Button>
         </Box>
 
-        <PositionTable
-          positions={positions}
-          editRequested={handleEditRequested}
-          deleteRequested={handleDeleteRequested}
-        />
+        <PositionTable />
 
         <Tooltip
           title="You need to have 100% target allocation to calculate"
           arrow
-          disableHoverListener={possibleToCalculate}
-          disableFocusListener={possibleToCalculate}
+          disableHoverListener={portfolioStore.shouldCalculate}
+          disableFocusListener={portfolioStore.shouldCalculate}
         >
           <Box component="span" sx={{ alignSelf: "flex-start", mt: 2 }}>
             <Button
               startIcon={<CalculateIcon />}
               variant="contained"
-              disabled={!possibleToCalculate}
+              disabled={!portfolioStore.shouldCalculate}
             >
               Calculate
             </Button>
@@ -93,14 +52,9 @@ const App: FC = () => {
         </Tooltip>
       </Stack>
 
-      <PositionFormDialog
-        open={addPositionDialogOpen}
-        position={editPosition}
-        onCancel={handleCancel}
-        onSubmit={handleSubmitPosition}
-      />
+      <PositionFormDialog />
     </Container>
   );
-};
+});
 
 export default App;

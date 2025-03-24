@@ -9,7 +9,7 @@ import PositionFormDialog from "./components/PositionFormDialog.tsx";
 
 const App: FC = () => {
   const [addPositionDialogOpen, setAddPositionDialogOpen] = useState(false);
-  const [balance, setBalance] = useState(1000);
+  const [balance, setBalance] = useState<number>(0);
   const [positions, setPositions] = useState<Position[]>([]);
   const [editPosition, setEditPosition] = useState<Position>();
 

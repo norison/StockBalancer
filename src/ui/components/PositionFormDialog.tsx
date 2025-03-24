@@ -17,7 +17,7 @@ import { Position } from "../types/Position.ts";
 
 const schema = yup.object({
   ticker: yup.string().required(),
-  quantity: yup.number().required().integer().moreThan(-1),
+  quantity: yup.number().required().integer().min(0),
   price: yup.number().required().positive(),
   target: yup.number().required().positive().max(100),
 });
@@ -45,12 +45,6 @@ const PositionFormDialog: FC<PositionFormDialogProps> = ({
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      ticker: "",
-      quantity: 0,
-      price: 0,
-      target: 0,
-    },
   });
 
   useEffect(() => {

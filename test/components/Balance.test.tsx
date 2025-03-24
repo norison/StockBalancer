@@ -4,7 +4,7 @@ import Balance from "../../src/ui/components/Balance";
 import { expect } from "vitest";
 
 describe("Balance", () => {
-  const balance = 1000;
+  const balance = 10.2;
   const balanceChanged = vi.fn();
 
   it("renders balance correctly", () => {
@@ -28,11 +28,12 @@ describe("Balance", () => {
 
     const input = screen.getByRole("textbox");
     await userEvent.clear(input);
-    await userEvent.type(input, "2000");
+    await userEvent.type(input, "10.4");
     const saveButton = screen.getByTestId("BalanceSaveButton");
     await userEvent.click(saveButton);
 
-    expect(balanceChanged).toHaveBeenCalledWith(2000);
+    expect(balanceChanged).toHaveBeenCalledWith(10.4);
+    expect(saveButton).toBeEnabled();
   });
 
   it("balanceChanged was not called because of validation error", async () => {

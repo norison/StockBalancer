@@ -11,11 +11,9 @@ type BalanceCardProps = {
   balanceChanged: (newBalance: number) => void;
 };
 
-const schema = yup
-  .object({
-    newBalance: yup.number().required().positive().integer(),
-  })
-  .required();
+const schema = yup.object({
+  newBalance: yup.number().required().positive(),
+});
 
 type FormData = yup.InferType<typeof schema>;
 

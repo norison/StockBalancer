@@ -49,7 +49,9 @@ const PositionTable: FC = observer(() => {
         </TableHead>
         <TableBody>
           {portfolioStore.positions.length === 0 ? (
-            <TableRow>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
               <TableCell colSpan={6} sx={{ padding: 2, textAlign: "center" }}>
                 <Typography>No positions</Typography>
               </TableCell>

@@ -3,4 +3,4 @@ export type Position = {
   quantity: number;
   price: number;
   target: number;
-}
+};

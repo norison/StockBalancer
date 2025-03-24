@@ -1,3 +1,3 @@
 export const Identifiers = {
-  Balancer: Symbol.for('Balancer')
+  Balancer: Symbol.for("Balancer"),
 };

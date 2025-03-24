@@ -8,8 +8,8 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 0,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, targetPercentage: 0 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, targetPercentage: 0 }
+        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 0 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 0 }
       ]
     };
 
@@ -21,8 +21,8 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 1000,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, targetPercentage: 50 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, targetPercentage: 50 }
+        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 50 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 50 }
       ]
     };
 
@@ -36,9 +36,9 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 140,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, targetPercentage: 50 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, targetPercentage: 30 },
-        { ticker: 'AMZN', quantity: 0, price: 50, targetPercentage: 20 }
+        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 50 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 30 },
+        { ticker: 'AMZN', quantity: 0, price: 50, percentage: 20 }
       ]
     };
 
@@ -53,8 +53,8 @@ describe('Balancer', () => {
     const portfolio: Portfolio = {
       balance: 50,
       positions: [
-        { ticker: 'AAPL', quantity: 10, price: 150, targetPercentage: 50 },
-        { ticker: 'GOOGL', quantity: 5, price: 100, targetPercentage: 50 }
+        { ticker: 'AAPL', quantity: 10, price: 150, percentage: 50 },
+        { ticker: 'GOOGL', quantity: 5, price: 100, percentage: 50 }
       ]
     };
 

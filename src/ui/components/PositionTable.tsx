@@ -41,7 +41,7 @@ const PositionTable: FC<PositionTableProps> = ({
         <TableHead>
           <TableRow>
             <TableCell align="left">
-              <Typography>Ticket</Typography>
+              <Typography>Ticker</Typography>
             </TableCell>
             <TableCell align="right">
               <Typography>Quantity</Typography>

@@ -41,7 +41,7 @@ const PositionTable: FC<PositionTableProps> = ({
         <TableHead>
           <TableRow>
             <TableCell align="left">
-              <Typography>Ticket</Typography>
+              <Typography>Ticker</Typography>
             </TableCell>
             <TableCell align="right">
               <Typography>Quantity</Typography>
@@ -63,7 +63,7 @@ const PositionTable: FC<PositionTableProps> = ({
         <TableBody>
           {positions.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5} sx={{ padding: 2, textAlign: "center" }}>
+              <TableCell colSpan={6} sx={{ padding: 2, textAlign: "center" }}>
                 <Typography>No positions</Typography>
               </TableCell>
             </TableRow>

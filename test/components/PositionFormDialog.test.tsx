@@ -20,9 +20,9 @@ describe("PositionFormDialog", () => {
   it("renders the dialog with default values", () => {
     renderComponent();
     expect(screen.getByLabelText(/Ticker/i)).toHaveValue("");
-    expect(screen.getByLabelText(/Quantity/i)).toHaveValue("0");
-    expect(screen.getByLabelText(/Price/i)).toHaveValue("0");
-    expect(screen.getByLabelText(/Target %/i)).toHaveValue("0");
+    expect(screen.getByLabelText(/Quantity/i)).toHaveValue("");
+    expect(screen.getByLabelText(/Price/i)).toHaveValue("");
+    expect(screen.getByLabelText(/Target %/i)).toHaveValue("");
   });
 
   it("renders the dialog with provided position values", () => {
@@ -82,7 +82,7 @@ describe("PositionFormDialog", () => {
       await screen.findByText(/ticker is a required field/i),
     ).toBeInTheDocument();
     expect(
-      await screen.findByText(/quantity must be greater than -1/i),
+      await screen.findByText(/quantity must be greater than or equal to 0/i),
     ).toBeInTheDocument();
     expect(
       await screen.findByText(/price must be a positive number/i),

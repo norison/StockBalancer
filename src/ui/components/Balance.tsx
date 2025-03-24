@@ -11,11 +11,9 @@ type BalanceCardProps = {
   balanceChanged: (newBalance: number) => void;
 };
 
-const schema = yup
-  .object({
-    newBalance: yup.number().required().positive().integer(),
-  })
-  .required();
+const schema = yup.object({
+  newBalance: yup.number().required().min(0),
+});
 
 type FormData = yup.InferType<typeof schema>;
 
@@ -90,7 +88,9 @@ const Balance: FC<BalanceCardProps> = ({ balance, balanceChanged }) => {
         </>
       ) : (
         <>
-          <Typography variant="h6">Current Balance: ${balance}</Typography>
+          <Typography variant="h6">
+            Current Balance: ${balance.toFixed(2)}
+          </Typography>
           <IconButton data-testid="BalanceEditButton" onClick={handleEditClick}>
             <EditOutlinedIcon />
           </IconButton>

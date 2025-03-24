@@ -12,7 +12,7 @@ type BalanceCardProps = {
 };
 
 const schema = yup.object({
-  newBalance: yup.number().required().positive(),
+  newBalance: yup.number().required().min(0),
 });
 
 type FormData = yup.InferType<typeof schema>;

@@ -14,7 +14,7 @@ import {
   TextField,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { usePortfolio } from "../stores/PortfolioStore.ts";
+import { usePortfolio } from "../container/container.ts";
 
 const schema = yup.object({
   ticker: yup.string().required(),

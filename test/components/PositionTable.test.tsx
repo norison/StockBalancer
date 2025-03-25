@@ -12,8 +12,8 @@ const positionsMock = vi.fn(() => [
   { ticker: "GOOGL", quantity: 5, price: 2500, target: 50 },
 ]);
 
-vi.mock("../../src/ui/stores/PortfolioStore.ts", async () => {
-  const actual = await vi.importActual("../../src/ui/stores/PortfolioStore.ts");
+vi.mock("../../src/ui/container/container.ts", async () => {
+  const actual = await vi.importActual("../../src/ui/container/container.ts");
 
   return {
     ...actual,

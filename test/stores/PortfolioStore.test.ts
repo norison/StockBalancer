@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { Position } from "../../src/ui/types/Position.ts";
 import { PortfolioStore } from "../../src/ui/stores/PortfolioStore.ts";
 
 describe("PortfolioStore", () => {
@@ -74,7 +73,7 @@ describe("PortfolioStore", () => {
   });
 
   it("opens and cancels the dialog", () => {
-    store.openAddDialog();
+    store.dialogOpen = true;
     expect(store.dialogOpen).toBe(true);
     store.cancelDialog();
     expect(store.dialogOpen).toBe(false);

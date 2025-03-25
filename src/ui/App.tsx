@@ -26,7 +26,7 @@ const App: FC = observer(() => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => portfolioStore.openAddDialog()}
+            onClick={() => (portfolioStore.dialogOpen = true)}
           >
             Add Position
           </Button>

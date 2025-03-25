@@ -1,9 +1,9 @@
 import { app, ipcMain, BrowserWindow } from "electron";
 import path from "path";
-import { isDev } from "./util.js";
+import { isDev, getPreloadPath } from "./util.js";
 import Store from "electron-store";
 
-const store = new Store();
+const store = new Store<Portfolio>();
 
 ipcMain.handle("store:get", (_, key) => {
   return store.get(key);
@@ -19,6 +19,7 @@ async function main() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      preload: getPreloadPath(),
     },
   });
 

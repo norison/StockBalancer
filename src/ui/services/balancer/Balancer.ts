@@ -1,7 +1,5 @@
 import { injectable } from "inversify";
 import { IBalancer } from "./IBalancer.ts";
-import { Portfolio } from "../../types/Portfolio.ts";
-import { Position } from "../../types/Position.ts";
 
 @injectable()
 export class Balancer implements IBalancer {

@@ -19,6 +19,10 @@ const Balance: FC = observer(() => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    console.log("Balance", portfolioStore.balance);
+  }, [portfolioStore.balance]);
+
   const {
     handleSubmit,
     control,

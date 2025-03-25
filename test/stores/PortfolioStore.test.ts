@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { PortfolioStore } from "../../src/ui/stores/PortfolioStore.ts";
+import { Position } from "../../src/ui/types/Position.ts";
 
 describe("PortfolioStore", () => {
   let store: PortfolioStore;

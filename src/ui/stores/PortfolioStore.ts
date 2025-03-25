@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import { Position } from "../types/Position.ts";
 
 export class PortfolioStore {
   public balance: number = 0;
@@ -8,11 +9,6 @@ export class PortfolioStore {
 
   constructor() {
     makeAutoObservable(this);
-  }
-
-  public addPortfolio(portfolio: Portfolio) {
-    this.balance = portfolio.balance;
-    this.positions = portfolio.positions;
   }
 
   public cancelDialog() {

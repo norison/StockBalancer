@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "inversify-react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import container from "./container/container.ts";
+import { container } from "./container/container.ts";
 import { theme } from "./theme.ts";
 import App from "./App.tsx";
 

@@ -8,8 +8,8 @@ const cancelDialogMock = vi.fn();
 const addPositionMock = vi.fn();
 const editPositionMock = vi.fn();
 
-vi.mock("../../src/ui/stores/PortfolioStore.ts", async () => {
-  const actual = await vi.importActual("../../src/ui/stores/PortfolioStore.ts");
+vi.mock("../../src/ui/container/container.ts", async () => {
+  const actual = await vi.importActual("../../src/ui/container/container.ts");
 
   return {
     ...actual,

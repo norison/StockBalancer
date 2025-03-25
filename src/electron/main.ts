@@ -13,8 +13,6 @@ ipcMain.handle("store:set", (_, key, value) => {
   store.set(key, value);
 });
 
-app.whenReady().then(main);
-
 async function main() {
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -32,3 +30,5 @@ async function main() {
     );
   }
 }
+
+app.whenReady().then(main);

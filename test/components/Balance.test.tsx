@@ -6,8 +6,8 @@ import { expect } from "vitest";
 
 let balance = 10.4;
 
-vi.mock("../../src/ui/stores/PortfolioStore.ts", async () => {
-  const actual = await vi.importActual("../../src/ui/stores/PortfolioStore.ts");
+vi.mock("../../src/ui/container/container.ts", async () => {
+  const actual = await vi.importActual("../../src/ui/container/container.ts");
 
   return {
     ...actual,

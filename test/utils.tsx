@@ -2,9 +2,8 @@ import { Provider } from "inversify-react";
 import { ReactNode } from "react";
 import { render } from "@testing-library/react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import container from "../src/ui/container/container.ts";
+import { container } from "../src/ui/container/container.ts";
 import { theme } from "../src/ui/theme.ts";
-import { PortfolioProvider, store } from "../src/ui/stores/PortfolioStore.ts";
 
 export const renderWithProviders = (component: ReactNode) => {
   return render(component, {
@@ -12,10 +11,8 @@ export const renderWithProviders = (component: ReactNode) => {
       return (
         <Provider container={container}>
           <ThemeProvider theme={theme}>
-            <PortfolioProvider value={store}>
-              <CssBaseline />
-              {children}
-            </PortfolioProvider>
+            <CssBaseline />
+            {children}
           </ThemeProvider>
         </Provider>
       );

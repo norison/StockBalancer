@@ -13,10 +13,10 @@ import {
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { observer } from "mobx-react-lite";
-import { usePortfolio } from "../container/container.ts";
+import { usePortfolioStore } from "../container/container.ts";
 
 const PositionTable: FC = observer(() => {
-  const portfolioStore = usePortfolio();
+  const portfolioStore = usePortfolioStore();
 
   const calculateCurrentPercentage = (quantity: number, price: number) => {
     return ((quantity * price) / portfolioStore.totalValue) * 100;

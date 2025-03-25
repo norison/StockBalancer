@@ -1,4 +1,5 @@
 import { Balancer } from "../../src/ui/services/balancer/Balancer";
+import { Portfolio } from "../../src/ui/types/Portfolio.ts";
 
 describe("Balancer", () => {
   const balancer = new Balancer();

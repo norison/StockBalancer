@@ -1,13 +1,18 @@
 import { IStorage } from "./IStorage.ts";
+import { Portfolio } from "../../types/Portfolio.ts";
 
 export class Storage implements IStorage {
   private readonly _portfolioKey: string = "portfolio";
 
   public async savePortfolio(portfolio: Portfolio): Promise<void> {
-    await window.electron.store.set(this._portfolioKey, portfolio);
+    await window.electron.store.set(
+      this._portfolioKey,
+      JSON.stringify(portfolio),
+    );
   }
 
-  public async loadPortfolio(): Promise<Portfolio> {
-    return await window.electron.store.get(this._portfolioKey);
+  public async getPortfolio(): Promise<Portfolio> {
+    const json = await window.electron.store.get(this._portfolioKey);
+    return json ? JSON.parse(json) : null;
   }
 }

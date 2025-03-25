@@ -17,7 +17,7 @@ vi.mock("../../src/ui/container/container.ts", async () => {
 
   return {
     ...actual,
-    usePortfolio: () => ({
+    usePortfolioStore: () => ({
       get positions() {
         return positionsMock();
       },

@@ -3,7 +3,7 @@ import path from "path";
 import { isDev, getPreloadPath } from "./util.js";
 import Store from "electron-store";
 
-const store = new Store<Portfolio>();
+const store = new Store();
 
 ipcMain.handle("store:get", (_, key) => {
   return store.get(key);

@@ -14,7 +14,7 @@ import {
   TextField,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
-import { usePortfolio } from "../container/container.ts";
+import { usePortfolioStore } from "../container/container.ts";
 
 const schema = yup.object({
   ticker: yup.string().required(),
@@ -26,7 +26,7 @@ const schema = yup.object({
 type FormData = yup.InferType<typeof schema>;
 
 const PositionFormDialog: FC = observer(() => {
-  const portfolioStore = usePortfolio();
+  const portfolioStore = usePortfolioStore();
 
   const {
     handleSubmit,

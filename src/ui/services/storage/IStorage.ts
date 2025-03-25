@@ -1,5 +1,7 @@
+import { Portfolio } from "../../types/Portfolio.ts";
+
 export interface IStorage {
   savePortfolio(portfolio: Portfolio): Promise<void>;
 
-  loadPortfolio(): Promise<Portfolio>;
+  getPortfolio(): Promise<Portfolio>;
 }

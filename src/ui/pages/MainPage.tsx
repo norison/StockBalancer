@@ -15,6 +15,7 @@ import { usePortfolioStore, useStorage } from "../container/container.ts";
 import PositionTable from "../components/PositionTable.tsx";
 import PositionFormDialog from "../components/PositionFormDialog.tsx";
 import Balance from "../components/Balance.tsx";
+import CalculationResult from "../components/CalculationResult.tsx";
 
 const MainPage: FC = observer(() => {
   const portfolioStore = usePortfolioStore();
@@ -75,6 +76,8 @@ const MainPage: FC = observer(() => {
             </Button>
           </Box>
         </Tooltip>
+
+        <CalculationResult />
       </Stack>
 
       <PositionFormDialog />

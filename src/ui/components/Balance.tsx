@@ -6,7 +6,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { observer } from "mobx-react-lite";
-import { usePortfolio } from "../stores/PortfolioStore.ts";
+import { usePortfolio } from "../container/container.ts";
 
 const schema = yup.object({
   newBalance: yup.number().required().min(0),

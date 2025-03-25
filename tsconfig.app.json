@@ -25,7 +25,10 @@
     "types": [
       "vitest/globals",
       "@testing-library/jest-dom"
-    ]
+    ],
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src", "test"],
   "exclude": ["src/electron"]

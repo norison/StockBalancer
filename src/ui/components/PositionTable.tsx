@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { usePortfolio } from "../stores/PortfolioStore.ts";
 import { observer } from "mobx-react-lite";
+import { usePortfolio } from "../container/container.ts";
 
 const PositionTable: FC = observer(() => {
   const portfolioStore = usePortfolio();

@@ -5,8 +5,8 @@ import AddIcon from "@mui/icons-material/Add";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import Balance from "./components/Balance.tsx";
 import PositionFormDialog from "./components/PositionFormDialog.tsx";
-import { usePortfolio } from "./stores/PortfolioStore.ts";
 import { observer } from "mobx-react-lite";
+import { usePortfolio } from "./container/container.ts";
 
 const App: FC = observer(() => {
   const portfolioStore = usePortfolio();

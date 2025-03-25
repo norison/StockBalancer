@@ -1,5 +1,4 @@
 import { Portfolio } from "../types/Portfolio.ts";
-import { createContext, useContext } from "react";
 import { makeAutoObservable } from "mobx";
 import { Position } from "../types/Position.ts";
 
@@ -95,9 +94,3 @@ export class PortfolioStore {
     this._dialogOpen = false;
   }
 }
-
-export const store = new PortfolioStore();
-const context = createContext(store);
-
-export const PortfolioProvider = context.Provider;
-export const usePortfolio = () => useContext(context);

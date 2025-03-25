@@ -43,7 +43,7 @@ const Balance: FC = observer(() => {
   }, [portfolioStore.balance, setValue]);
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    portfolioStore.balance = data.newBalance;
+    portfolioStore.updateBalance(data.newBalance);
     setIsEditing(false);
   };
 

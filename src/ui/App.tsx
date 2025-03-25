@@ -17,8 +17,7 @@ const App: FC = observer(() => {
   useEffect(() => {
     storage.getPortfolio().then((portfolio) => {
       if (portfolio) {
-        portfolioStore.balance = portfolio.balance;
-        portfolioStore.positions = portfolio.positions;
+        portfolioStore.loadPortfolio(portfolio);
       }
     });
   }, [storage, portfolioStore]);

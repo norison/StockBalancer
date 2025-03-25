@@ -15,7 +15,7 @@ vi.mock("../../src/ui/container/container.ts", async () => {
       get balance() {
         return balance;
       },
-      set balance(value: number) {
+      updateBalance(value: number) {
         balance = value;
       },
     }),

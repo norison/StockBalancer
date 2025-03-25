@@ -12,6 +12,7 @@ export class Storage implements IStorage {
   }
 
   public async getPortfolio(): Promise<Portfolio> {
-    return JSON.parse(await window.electron.store.get(this._portfolioKey));
+    const json = await window.electron.store.get(this._portfolioKey);
+    return json ? JSON.parse(json) : null;
   }
 }

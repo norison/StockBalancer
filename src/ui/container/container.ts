@@ -17,7 +17,7 @@ const appModule = new ContainerModule((bind) => {
 export const container = new Container();
 container.load(appModule);
 
-export const usePortfolio = () =>
+export const usePortfolioStore = () =>
   container.get<PortfolioStore>(Identifiers.PortfolioStore);
 
 export const useStorage = () => container.get<IStorage>(Identifiers.Storage);

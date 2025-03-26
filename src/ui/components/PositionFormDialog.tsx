@@ -92,9 +92,6 @@ const PositionFormDialog: FC = observer(() => {
   ]);
 
   const onSubmitInternal = (data: FormData) => {
-    console.log("Submitting", data);
-    console.log("Current Position", portfolioStore.currentPosition);
-
     if (portfolioStore.currentPosition) {
       portfolioStore.editPosition(data);
     } else {

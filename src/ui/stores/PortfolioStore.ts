@@ -30,11 +30,9 @@ export class PortfolioStore {
   }
 
   public get totalValue() {
-    return this._positions.reduce(
-      (previousValue, position) =>
-        previousValue + position.quantity * position.price,
-      0,
-    );
+    return this._positions.reduce((previousValue, position) => {
+      return previousValue + position.quantity * position.price;
+    }, 0);
   }
 
   // endregion
@@ -91,6 +89,7 @@ export class PortfolioStore {
     const index = this._positions.findIndex(
       (p) => p.ticker === position.ticker,
     );
+
     this._positions[index] = position;
     this._currentPosition = null;
     this._dialogOpen = false;

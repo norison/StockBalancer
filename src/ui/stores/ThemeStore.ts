@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { inject } from "inversify";
 import { Identifiers } from "../container/identifiers.ts";
 import { type IStorage } from "../services/storage/IStorage.ts";
@@ -17,7 +17,11 @@ export class ThemeStore {
   }
 
   public async init(): Promise<void> {
-    this._theme = await this._storage.getTheme();
+    const theme = await this._storage.getTheme();
+
+    runInAction(() => {
+      this._theme = theme;
+    });
   }
 
   public async setTheme(theme: "light" | "dark"): Promise<void> {

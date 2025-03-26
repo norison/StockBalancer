@@ -112,6 +112,14 @@ const CalculationResult: FC = observer(() => {
     portfolioStore.loadPortfolio(newPortfolio);
   };
 
+  if (maps.targetSum !== 100) {
+    return (
+      <Typography variant="h6" sx={{ mt: 2, textAlign: "center" }}>
+        The sum of the targets must be 100%
+      </Typography>
+    );
+  }
+
   return (
     <Stack sx={{ mt: 2 }} spacing={1}>
       <Typography variant="h6" sx={{ mr: 1 }}>

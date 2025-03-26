@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Box, Container, IconButton, Stack, Tooltip } from "@mui/material";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
 import { observer } from "mobx-react-lite";
 import { usePortfolioStore, useStorage } from "../container/container.ts";
 import PositionTable from "../components/PositionTable.tsx";
@@ -20,6 +21,13 @@ const MainPage: FC = observer(() => {
     });
   };
 
+  const restorePortfolio = async () => {
+    const portfolio = await storage.getPortfolio();
+    if (portfolio) {
+      portfolioStore.loadPortfolio(portfolio);
+    }
+  };
+
   return (
     <Container sx={{ my: 2 }}>
       <Stack>
@@ -34,6 +42,12 @@ const MainPage: FC = observer(() => {
           <Balance />
 
           <Box>
+            <Tooltip title="Restore saved balance and positions" arrow>
+              <IconButton onClick={restorePortfolio}>
+                <RestoreOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+
             <Tooltip title="Save balance and positions" arrow>
               <IconButton onClick={savePortfolio}>
                 <SaveAsOutlinedIcon />

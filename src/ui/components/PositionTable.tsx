@@ -14,12 +14,15 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { observer } from "mobx-react-lite";
 import { usePortfolioStore } from "../container/container.ts";
+import { formatNumberToCurrency, formatNumberToPercentage } from "../utils.ts";
 
 const PositionTable: FC = observer(() => {
   const portfolioStore = usePortfolioStore();
 
   const calculateCurrentPercentage = (quantity: number, price: number) => {
-    return ((quantity * price) / portfolioStore.totalValue) * 100;
+    return formatNumberToPercentage(
+      ((quantity * price) / portfolioStore.totalValue) * 100,
+    );
   };
 
   return (
@@ -71,18 +74,21 @@ const PositionTable: FC = observer(() => {
                   <Typography>{position.quantity}</Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography>${position.price.toFixed(2)}</Typography>
+                  <Typography>
+                    {formatNumberToCurrency(position.price)}
+                  </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography>{position.target.toFixed(2)}%</Typography>
+                  <Typography>
+                    {formatNumberToPercentage(position.target)}
+                  </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography>
                     {calculateCurrentPercentage(
                       position.quantity,
                       position.price,
-                    ).toFixed(2)}
-                    %
+                    )}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
@@ -95,6 +101,7 @@ const PositionTable: FC = observer(() => {
                   >
                     <EditOutlinedIcon />
                   </IconButton>
+
                   <IconButton
                     data-testid="PositionTableDeleteButton"
                     size="small"

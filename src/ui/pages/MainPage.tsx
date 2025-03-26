@@ -54,7 +54,7 @@ const MainPage: FC = observer(() => {
           <Balance />
 
           <Box>
-            <Tooltip title="Change theme" arrow>
+            <Tooltip title="Change theme" arrow placement="top">
               <IconButton onClick={changeTheme}>
                 {themeStore.theme === "light" ? (
                   <LightModeOutlinedIcon />
@@ -64,19 +64,23 @@ const MainPage: FC = observer(() => {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Restore saved balance and positions" arrow>
+            <Tooltip
+              title="Restore saved balance and positions"
+              arrow
+              placement="top"
+            >
               <IconButton onClick={restorePortfolio}>
                 <RestoreOutlinedIcon />
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Save balance and positions" arrow>
+            <Tooltip title="Save balance and positions" arrow placement="top">
               <IconButton onClick={savePortfolio}>
                 <SaveAsOutlinedIcon />
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Add new position" arrow>
+            <Tooltip title="Add new position" arrow placement="top">
               <IconButton onClick={() => portfolioStore.openAddDialog()}>
                 <AddCircleOutlineOutlinedIcon />
               </IconButton>

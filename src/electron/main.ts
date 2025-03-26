@@ -21,6 +21,8 @@ async function main() {
       nodeIntegration: true,
       preload: getPreloadPath(),
     },
+    titleBarStyle: "hidden",
+    ...(process.platform !== "darwin" ? { titleBarOverlay: true } : {}),
   });
 
   if (isDev()) {

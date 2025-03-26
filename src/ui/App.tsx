@@ -10,6 +10,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { darkTheme, lightTheme } from "./themes.ts";
 import { Provider } from "inversify-react";
 import MainPage from "./pages/MainPage.tsx";
+import TitleBar from "./components/TitleBar.tsx";
 
 const App: FC = observer(() => {
   const storage = useStorage();
@@ -34,6 +35,7 @@ const App: FC = observer(() => {
         theme={themeStore.theme === "light" ? lightTheme : darkTheme}
       >
         <CssBaseline />
+        <TitleBar />
         <MainPage />
       </ThemeProvider>
     </Provider>

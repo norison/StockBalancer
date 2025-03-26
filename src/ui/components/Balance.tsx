@@ -2,6 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { Box, IconButton, Typography, TextField } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -51,6 +52,11 @@ const Balance: FC = observer(() => {
     setIsEditing(true);
   };
 
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setValue("newBalance", portfolioStore.balance);
+  };
+
   return (
     <Box display="flex" alignItems="center" justifyContent="space-between">
       {isEditing ? (
@@ -75,10 +81,18 @@ const Balance: FC = observer(() => {
                   {...field}
                   inputRef={inputRef}
                   variant="standard"
-                  sx={{ maxWidth: 100 }}
+                  size="small"
+                  sx={{ maxWidth: 55 }}
                 />
               )}
             />
+            <IconButton
+              data-testid="BalanceCancelButton"
+              onClick={handleCancelClick}
+              size="small"
+            >
+              <CloseOutlinedIcon />
+            </IconButton>
             <IconButton
               data-testid="BalanceSaveButton"
               type="submit"

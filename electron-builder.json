@@ -1,5 +1,7 @@
 {
   "appId": "com.norison.stock-balancer",
+  "productName": "Stock Balancer",
+  "icon": "./icon.png",
   "files": [
     "dist-electron",
     "dist-react"

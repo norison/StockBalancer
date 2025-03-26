@@ -7,8 +7,8 @@ import { IStorage } from "../services/storage/IStorage.ts";
 import { Storage } from "../services/storage/Storage.ts";
 
 const appModule = new ContainerModule((bind) => {
-  bind<IBalancer>(Identifiers.Balancer).to(Balancer);
-  bind<IStorage>(Identifiers.Storage).to(Storage);
+  bind<IBalancer>(Identifiers.Balancer).to(Balancer).inSingletonScope();
+  bind<IStorage>(Identifiers.Storage).to(Storage).inSingletonScope();
   bind<PortfolioStore>(Identifiers.PortfolioStore)
     .to(PortfolioStore)
     .inSingletonScope();

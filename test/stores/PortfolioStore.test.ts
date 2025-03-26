@@ -17,7 +17,7 @@ describe("PortfolioStore", () => {
   });
 
   it("sets and gets balance", () => {
-    store.balance = 100;
+    store.updateBalance(100);
     expect(store.balance).toBe(100);
   });
 
@@ -74,7 +74,7 @@ describe("PortfolioStore", () => {
   });
 
   it("opens and cancels the dialog", () => {
-    store.dialogOpen = true;
+    store.openAddDialog();
     expect(store.dialogOpen).toBe(true);
     store.cancelDialog();
     expect(store.dialogOpen).toBe(false);

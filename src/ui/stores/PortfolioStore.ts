@@ -1,62 +1,100 @@
 import { makeAutoObservable } from "mobx";
 import { Position } from "../types/Position.ts";
+import { Portfolio } from "../types/Portfolio.ts";
 
 export class PortfolioStore {
-  public balance: number = 0;
-  public positions: Position[] = [];
-  public currentPosition: Position | null = null;
-  public dialogOpen = false;
+  private _balance: number = 0;
+  private _positions: Position[] = [];
+  private _currentPosition: Position | null = null;
+  private _dialogOpen = false;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  public cancelDialog() {
-    this.dialogOpen = false;
-    this.currentPosition = null;
+  // region Getters and Setters
+  public get balance(): number {
+    return this._balance;
+  }
+
+  public get positions(): Position[] {
+    return this._positions;
+  }
+
+  public get currentPosition(): Position | null {
+    return this._currentPosition;
+  }
+
+  public get dialogOpen(): boolean {
+    return this._dialogOpen;
   }
 
   public get totalValue() {
-    return this.positions.reduce(
+    return this._positions.reduce(
       (previousValue, position) =>
         previousValue + position.quantity * position.price,
       0,
     );
   }
 
+  // endregion
+
+  // region Actions
+  public openAddDialog() {
+    this._dialogOpen = true;
+  }
+
+  public updateBalance(newBalance: number) {
+    this._balance = newBalance;
+  }
+
+  public loadPortfolio(portfolio: Portfolio) {
+    this._balance = portfolio.balance;
+    this._positions = portfolio.positions;
+  }
+
   public get shouldCalculate() {
     return (
-      this.positions.reduce((prev, position) => prev + position.target, 0) ===
+      this._positions.reduce((prev, position) => prev + position.target, 0) ===
       100
     );
   }
 
-  public openEditDialog(ticker: string) {
-    this.currentPosition =
-      this.positions.find((position) => position.ticker === ticker) ?? null;
+  public cancelDialog() {
+    this._dialogOpen = false;
+    this._currentPosition = null;
+  }
 
-    if (this.currentPosition === null) {
+  public openEditDialog(ticker: string) {
+    this._currentPosition =
+      this._positions.find((position) => position.ticker === ticker) ?? null;
+
+    if (this._currentPosition === null) {
       return;
     }
 
-    this.dialogOpen = true;
+    this._dialogOpen = true;
   }
 
   public addPosition(position: Position) {
-    this.positions.push(position);
-    this.dialogOpen = false;
+    this._positions.push(position);
+    this._dialogOpen = false;
   }
 
   public removePosition(ticker: string) {
-    this.positions = this.positions.filter(
+    this._positions = this._positions.filter(
       (position) => position.ticker !== ticker,
     );
   }
 
   public editPosition(position: Position) {
-    const index = this.positions.findIndex((p) => p.ticker === position.ticker);
-    this.positions[index] = position;
-    this.currentPosition = null;
-    this.dialogOpen = false;
+    const index = this._positions.findIndex(
+      (p) => p.ticker === position.ticker,
+    );
+    this._positions[index] = position;
+    this._currentPosition = null;
+    this._dialogOpen = false;
   }
+
+  // endregion
 }

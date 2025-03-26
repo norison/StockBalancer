@@ -19,13 +19,10 @@ const Balance: FC = observer(() => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    console.log("Balance", portfolioStore.balance);
-  }, [portfolioStore.balance]);
-
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
@@ -41,8 +38,12 @@ const Balance: FC = observer(() => {
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    setValue("newBalance", portfolioStore.balance);
+  }, [portfolioStore.balance, setValue]);
+
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    portfolioStore.balance = data.newBalance;
+    portfolioStore.updateBalance(data.newBalance);
     setIsEditing(false);
   };
 

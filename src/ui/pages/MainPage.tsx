@@ -1,15 +1,7 @@
 import { FC } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Stack,
-  Tooltip,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import CalculateIcon from "@mui/icons-material/Calculate";
+import { Box, Container, IconButton, Stack, Tooltip } from "@mui/material";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { observer } from "mobx-react-lite";
 import { usePortfolioStore, useStorage } from "../container/container.ts";
 import PositionTable from "../components/PositionTable.tsx";
@@ -42,41 +34,21 @@ const MainPage: FC = observer(() => {
           <Balance />
 
           <Box>
-            <Tooltip title="Save balance and positions" arrow sx={{ mx: 2 }}>
+            <Tooltip title="Save balance and positions" arrow>
               <IconButton onClick={savePortfolio}>
                 <SaveAsOutlinedIcon />
               </IconButton>
             </Tooltip>
 
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => portfolioStore.openAddDialog()}
-            >
-              Add Position
-            </Button>
+            <Tooltip title="Add new position" arrow>
+              <IconButton onClick={() => portfolioStore.openAddDialog()}>
+                <AddCircleOutlineOutlinedIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Box>
 
         <PositionTable />
-
-        <Tooltip
-          title="You need to have 100% target allocation to calculate"
-          arrow
-          disableHoverListener={portfolioStore.shouldCalculate}
-          disableFocusListener={portfolioStore.shouldCalculate}
-        >
-          <Box component="span" sx={{ alignSelf: "flex-start", mt: 2 }}>
-            <Button
-              startIcon={<CalculateIcon />}
-              variant="contained"
-              disabled={!portfolioStore.shouldCalculate}
-            >
-              Calculate
-            </Button>
-          </Box>
-        </Tooltip>
-
         <CalculationResult />
       </Stack>
 

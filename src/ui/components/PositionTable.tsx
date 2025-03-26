@@ -71,10 +71,10 @@ const PositionTable: FC = observer(() => {
                   <Typography>{position.quantity}</Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography>${position.price}</Typography>
+                  <Typography>${position.price.toFixed(2)}</Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography>{position.target}%</Typography>
+                  <Typography>{position.target.toFixed(2)}%</Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography>

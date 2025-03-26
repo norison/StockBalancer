@@ -34,4 +34,30 @@ describe("Storage", () => {
     expect(result).toEqual(portfolio);
     expect(mockStore.get).toHaveBeenCalledWith("portfolio");
   });
+
+  it("when no portfolio is saved, should return null", async () => {
+    mockStore.get.mockResolvedValueOnce(null);
+    const result = await storage.getPortfolio();
+    expect(result).toBeNull();
+    expect(mockStore.get).toHaveBeenCalledWith("portfolio");
+  });
+
+  it("should save darkTheme", async () => {
+    await storage.saveTheme("dark");
+    expect(mockStore.set).toHaveBeenCalledWith("theme", "dark");
+  });
+
+  it("should get darkTheme", async () => {
+    mockStore.get.mockResolvedValueOnce("dark");
+    const result = await storage.getTheme();
+    expect(result).toEqual("dark");
+    expect(mockStore.get).toHaveBeenCalledWith("theme");
+  });
+
+  it("when no darkTheme is saved, should return 'light'", async () => {
+    mockStore.get.mockResolvedValueOnce(null);
+    const result = await storage.getTheme();
+    expect(result).toEqual("light");
+    expect(mockStore.get).toHaveBeenCalledWith("theme");
+  });
 });

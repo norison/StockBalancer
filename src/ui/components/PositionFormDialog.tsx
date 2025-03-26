@@ -24,7 +24,7 @@ const PositionFormDialog: FC = observer(() => {
       .string()
       .required()
       .test("unique", "Ticker already exists", (value) => {
-        if (!value) {
+        if (!value || portfolioStore.currentPosition) {
           return true;
         }
         return !portfolioStore.positions.some(
@@ -52,6 +52,7 @@ const PositionFormDialog: FC = observer(() => {
     handleSubmit,
     control,
     reset,
+    clearErrors,
     setValue,
     formState: { errors },
   } = useForm<FormData>({
@@ -72,13 +73,14 @@ const PositionFormDialog: FC = observer(() => {
 
   useEffect(() => {
     if (portfolioStore.dialogOpen) {
+      reset();
+      clearErrors();
+
       if (portfolioStore.currentPosition) {
         setValue("ticker", portfolioStore.currentPosition.ticker);
         setValue("quantity", portfolioStore.currentPosition.quantity);
         setValue("price", portfolioStore.currentPosition.price);
         setValue("target", portfolioStore.currentPosition.target);
-      } else {
-        reset();
       }
     }
   }, [
@@ -86,12 +88,17 @@ const PositionFormDialog: FC = observer(() => {
     setValue,
     portfolioStore.currentPosition,
     portfolioStore.dialogOpen,
+    clearErrors,
   ]);
 
   const onSubmitInternal = (data: FormData) => {
+    console.log("Submitting", data);
+    console.log("Current Position", portfolioStore.currentPosition);
+
     if (portfolioStore.currentPosition) {
       portfolioStore.editPosition(data);
     } else {
+      console.log("adding position");
       portfolioStore.addPosition(data);
     }
   };
@@ -102,7 +109,9 @@ const PositionFormDialog: FC = observer(() => {
       onClose={() => portfolioStore.cancelDialog()}
       disableRestoreFocus
     >
-      <DialogTitle>Add Position</DialogTitle>
+      <DialogTitle>
+        {portfolioStore.currentPosition ? "Edit Position" : "Add Position"}
+      </DialogTitle>
       <DialogContent>
         <Divider />
         <Box
@@ -124,6 +133,7 @@ const PositionFormDialog: FC = observer(() => {
                     error={!!errors.ticker}
                     helperText={errors.ticker?.message}
                     sx={{ width: 200 }}
+                    disabled={!!portfolioStore.currentPosition}
                   />
                 )}
               />

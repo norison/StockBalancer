@@ -68,6 +68,7 @@ const PositionFormDialog: FC = observer(() => {
     <Dialog
       open={portfolioStore.dialogOpen}
       onClose={() => portfolioStore.cancelDialog()}
+      disableRestoreFocus
     >
       <DialogTitle>Add Position</DialogTitle>
       <DialogContent>
@@ -84,8 +85,8 @@ const PositionFormDialog: FC = observer(() => {
                 control={control}
                 render={({ field }) => (
                   <TextField
+                    autoFocus
                     {...field}
-                    inputRef={field.ref}
                     variant="outlined"
                     label="Ticker"
                     error={!!errors.ticker}

@@ -4,15 +4,17 @@ import {
   container,
   usePortfolioStore,
   useStorage,
+  useThemeStore,
 } from "./container/container.ts";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { theme } from "./theme.ts";
+import { darkTheme, lightTheme } from "./themes.ts";
 import { Provider } from "inversify-react";
 import MainPage from "./pages/MainPage.tsx";
 
 const App: FC = observer(() => {
   const storage = useStorage();
   const portfolioStore = usePortfolioStore();
+  const themeStore = useThemeStore();
 
   useEffect(() => {
     storage.getPortfolio().then((portfolio) => {
@@ -22,9 +24,15 @@ const App: FC = observer(() => {
     });
   }, [storage, portfolioStore]);
 
+  useEffect(() => {
+    themeStore.init();
+  }, [themeStore]);
+
   return (
     <Provider container={container}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider
+        theme={themeStore.theme === "light" ? lightTheme : darkTheme}
+      >
         <CssBaseline />
         <MainPage />
       </ThemeProvider>

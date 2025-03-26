@@ -3,8 +3,14 @@ import { Box, Container, IconButton, Stack, Tooltip } from "@mui/material";
 import SaveAsOutlinedIcon from "@mui/icons-material/SaveAsOutlined";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import RestoreOutlinedIcon from "@mui/icons-material/RestoreOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { observer } from "mobx-react-lite";
-import { usePortfolioStore, useStorage } from "../container/container.ts";
+import {
+  usePortfolioStore,
+  useStorage,
+  useThemeStore,
+} from "../container/container.ts";
 import PositionTable from "../components/PositionTable.tsx";
 import PositionFormDialog from "../components/PositionFormDialog.tsx";
 import Balance from "../components/Balance.tsx";
@@ -12,6 +18,7 @@ import CalculationResult from "../components/CalculationResult.tsx";
 
 const MainPage: FC = observer(() => {
   const portfolioStore = usePortfolioStore();
+  const themeStore = useThemeStore();
   const storage = useStorage();
 
   const savePortfolio = async () => {
@@ -28,6 +35,11 @@ const MainPage: FC = observer(() => {
     }
   };
 
+  const changeTheme = async () => {
+    const theme = themeStore.theme === "light" ? "dark" : "light";
+    await themeStore.setTheme(theme);
+  };
+
   return (
     <Container sx={{ my: 2 }}>
       <Stack>
@@ -42,6 +54,16 @@ const MainPage: FC = observer(() => {
           <Balance />
 
           <Box>
+            <Tooltip title="Change theme" arrow>
+              <IconButton onClick={changeTheme}>
+                {themeStore.theme === "light" ? (
+                  <LightModeOutlinedIcon />
+                ) : (
+                  <DarkModeOutlinedIcon />
+                )}
+              </IconButton>
+            </Tooltip>
+
             <Tooltip title="Restore saved balance and positions" arrow>
               <IconButton onClick={restorePortfolio}>
                 <RestoreOutlinedIcon />

@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import { Box, IconButton, Typography, TextField } from "@mui/material";
+import { Box, IconButton, Typography, TextField, Tooltip } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { observer } from "mobx-react-lite";
 import { usePortfolioStore } from "../container/container.ts";
+import { formatNumberToCurrency } from "../utils.ts";
 
 const schema = yup.object({
   newBalance: yup.number().required().min(0),
@@ -106,11 +107,16 @@ const Balance: FC = observer(() => {
       ) : (
         <>
           <Typography variant="h6">
-            Current Balance: ${portfolioStore.balance.toFixed(2)}
+            Current Balance: {formatNumberToCurrency(portfolioStore.balance)}
           </Typography>
-          <IconButton data-testid="BalanceEditButton" onClick={handleEditClick}>
-            <EditOutlinedIcon />
-          </IconButton>
+          <Tooltip title="Edit balance" placement="right" arrow>
+            <IconButton
+              data-testid="BalanceEditButton"
+              onClick={handleEditClick}
+            >
+              <EditOutlinedIcon />
+            </IconButton>
+          </Tooltip>
         </>
       )}
     </Box>

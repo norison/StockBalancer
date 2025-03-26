@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useBalancer, usePortfolioStore } from "../container/container.ts";
+import { formatNumberToCurrency, formatNumberToPercentage } from "../utils.ts";
 
 const CalculationResult: FC = observer(() => {
   const portfolioStore = usePortfolioStore();
@@ -84,11 +85,22 @@ const CalculationResult: FC = observer(() => {
     portfolioStore.targetSum,
   ]);
 
-  const getCorrectSuffix = (diff: number, useFixed: boolean = true) => {
-    const finalValue = useFixed ? diff.toFixed(2) : diff.toString();
-
+  const getCorrectSuffix = (
+    diff: number,
+    type: "money" | "percentage" | null = null,
+  ) => {
     if (diff == 0) {
       return null;
+    }
+
+    let finalValue;
+
+    if (type === "money") {
+      finalValue = formatNumberToCurrency(diff);
+    } else if (type === "percentage") {
+      finalValue = formatNumberToPercentage(diff);
+    } else {
+      finalValue = diff.toString();
     }
 
     if (diff > 0) {
@@ -123,8 +135,8 @@ const CalculationResult: FC = observer(() => {
   return (
     <Stack sx={{ mt: 2 }} spacing={1}>
       <Typography variant="h6" sx={{ mr: 1 }}>
-        Result Balance: ${maps.balanceMap.newValue.toFixed(2)}{" "}
-        {getCorrectSuffix(maps.balanceMap.diff)}
+        Result Balance: {formatNumberToCurrency(maps.balanceMap.newValue)}{" "}
+        {getCorrectSuffix(maps.balanceMap.diff, "money")}
       </Typography>
 
       <TableContainer component={Paper}>
@@ -170,19 +182,19 @@ const CalculationResult: FC = observer(() => {
                   <TableCell align="right">
                     <Typography>
                       {position.quantity}{" "}
-                      {getCorrectSuffix(position.diffQuantity, false)}
+                      {getCorrectSuffix(position.diffQuantity)}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
                     <Typography>
-                      ${position.newTotal.toFixed(2)}{" "}
-                      {getCorrectSuffix(position.diffTotal)}
+                      {formatNumberToCurrency(position.newTotal)}{" "}
+                      {getCorrectSuffix(position.diffTotal, "money")}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
                     <Typography>
-                      {position.newPercentage.toFixed(2)}%{" "}
-                      {getCorrectSuffix(position.diffPercentage)}
+                      {formatNumberToPercentage(position.newPercentage)}{" "}
+                      {getCorrectSuffix(position.diffPercentage, "percentage")}
                     </Typography>
                   </TableCell>
                 </TableRow>

@@ -16,17 +16,37 @@ import {
 import { observer } from "mobx-react-lite";
 import { usePortfolioStore } from "../container/container.ts";
 
-const schema = yup.object({
-  ticker: yup.string().required(),
-  quantity: yup.number().required().integer().min(0),
-  price: yup.number().required().positive(),
-  target: yup.number().required().positive().max(100),
-});
-
-type FormData = yup.InferType<typeof schema>;
-
 const PositionFormDialog: FC = observer(() => {
   const portfolioStore = usePortfolioStore();
+
+  const schema = yup.object({
+    ticker: yup
+      .string()
+      .required()
+      .test("unique", "Ticker already exists", (value) => {
+        if (!value) {
+          return true;
+        }
+        return !portfolioStore.positions.some(
+          (position) => position.ticker.toLowerCase() === value.toLowerCase(),
+        );
+      }),
+    quantity: yup
+      .number()
+      .typeError("Must be a number")
+      .required()
+      .integer()
+      .min(0),
+    price: yup.number().typeError("Must be a number").required().positive(),
+    target: yup
+      .number()
+      .typeError("Must be a number")
+      .required()
+      .positive()
+      .max(100),
+  });
+
+  type FormData = yup.InferType<typeof schema>;
 
   const {
     handleSubmit,
@@ -36,6 +56,18 @@ const PositionFormDialog: FC = observer(() => {
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      ticker: "",
+      // eslint-disable-next-line
+      // @ts-ignore
+      quantity: "",
+      // eslint-disable-next-line
+      // @ts-ignore
+      price: "",
+      // eslint-disable-next-line
+      // @ts-ignore
+      target: "",
+    },
   });
 
   useEffect(() => {
@@ -91,6 +123,7 @@ const PositionFormDialog: FC = observer(() => {
                     label="Ticker"
                     error={!!errors.ticker}
                     helperText={errors.ticker?.message}
+                    sx={{ width: 200 }}
                   />
                 )}
               />
@@ -104,6 +137,7 @@ const PositionFormDialog: FC = observer(() => {
                     label="Quantity"
                     error={!!errors.quantity}
                     helperText={errors.quantity?.message}
+                    sx={{ width: 200 }}
                   />
                 )}
               />
@@ -120,6 +154,7 @@ const PositionFormDialog: FC = observer(() => {
                     label="Price"
                     error={!!errors.price}
                     helperText={errors.price?.message}
+                    sx={{ width: 200 }}
                   />
                 )}
               />
@@ -133,6 +168,7 @@ const PositionFormDialog: FC = observer(() => {
                     label="Target %"
                     error={!!errors.target}
                     helperText={errors.target?.message}
+                    sx={{ width: 200 }}
                   />
                 )}
               />

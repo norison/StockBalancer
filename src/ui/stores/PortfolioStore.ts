@@ -35,6 +35,13 @@ export class PortfolioStore {
     }, 0);
   }
 
+  public get targetSum() {
+    return this._positions.reduce(
+      (prev, position) => prev + position.target,
+      0,
+    );
+  }
+
   // endregion
 
   // region Actions

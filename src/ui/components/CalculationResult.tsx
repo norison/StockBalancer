@@ -19,6 +19,8 @@ const CalculationResult: FC = observer(() => {
   const balancer = useBalancer();
 
   const maps = useMemo(() => {
+    const targetSum = portfolioStore.targetSum;
+
     const currentPortfolio = {
       balance: portfolioStore.balance,
       positions: portfolioStore.positions,
@@ -70,6 +72,7 @@ const CalculationResult: FC = observer(() => {
     });
 
     return {
+      targetSum,
       balanceMap,
       positionsMap,
     };
@@ -78,6 +81,7 @@ const CalculationResult: FC = observer(() => {
     portfolioStore.balance,
     portfolioStore.positions,
     portfolioStore.totalValue,
+    portfolioStore.targetSum,
   ]);
 
   const getCorrectSuffix = (diff: number, useFixed: boolean = true) => {
